@@ -191,26 +191,26 @@ export default function App() {
       <div className="avstudiox-theme min-h-screen flex flex-col selection:bg-white/20">
 
         {/* HEADER: AVSTUDIOX Cinematic Dark */}
-        <header className="bg-black/40 backdrop-blur-2xl border-b border-white/5 px-8 py-5 flex items-center justify-between sticky top-0 z-50">
-          <div className="flex items-center gap-4">
-            <div className="glow-border p-2 rounded-xl">
-              <Aperture className="w-6 h-6 text-white" />
+        <header className="bg-black/40 backdrop-blur-2xl border-b border-white/5 px-4 sm:px-6 lg:px-8 py-4 lg:py-5 flex items-center justify-between sticky top-0 z-50">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="glow-border p-2 sm:p-2.5 rounded-xl">
+              <Aperture className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white tracking-tight">Avstudiox Render Engine</h1>
-              <p className="text-[15px] text-[#888] font-medium">Automated Graphic Pipeline</p>
+              <h1 className="text-base sm:text-lg font-bold text-white tracking-tight leading-tight">Avstudiox Render Engine</h1>
+              <p className="hidden sm:block text-[13px] sm:text-[15px] text-[#888] font-medium mt-0.5">Automated Graphic Pipeline</p>
             </div>
           </div>
 
           {/* AVSTUDIOX IMAGE LOGO (With Sandbox Fallback) */}
-          <div className="flex items-center gap-3 glow-border px-5 py-2.5 rounded-full cursor-default">
-            <span className="text-[10px] text-[#888] font-bold tracking-[0.2em] uppercase mt-0.5">Powered by</span>
+          <div className="flex items-center gap-2 sm:gap-3 glow-border px-3 sm:px-5 py-2 sm:py-2.5 rounded-full cursor-default">
+            <span className="hidden md:inline text-[10px] text-[#888] font-bold tracking-[0.2em] uppercase mt-0.5">Powered by</span>
 
             {/* Using the exact uploaded image file */}
             <img
               src="/avstudiox_logo_white.png"
               alt="AVSTUDIOX"
-              className="h-[44px] object-contain"
+              className="h-[24px] sm:h-[34px] lg:h-[44px] object-contain"
               onError={(e) => {
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
@@ -219,19 +219,19 @@ export default function App() {
 
             {/* Perfect code-replica fallback for web preview where local files can't load */}
             <div className="hidden items-center text-white select-none">
-              <span className="text-[14px] font-[800] tracking-[0.08em] leading-none">AVSTUDIOX</span>
-              <span className="text-[20px] font-[900] leading-none ml-[1px]">X</span>
+              <span className="text-[12px] sm:text-[14px] font-[800] tracking-[0.08em] leading-none">AVSTUDIOX</span>
+              <span className="text-[16px] sm:text-[20px] font-[900] leading-none ml-[1px]">X</span>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative bg-[#000000]">
+        <main className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative bg-[#000000]">
 
           {/* Cinematic Light Glow Background */}
-          <div className="absolute top-[5%] left-[10%] w-[80%] h-[80%] bg-white/[0.03] blur-[120px] pointer-events-none rounded-full" />
+          <div className="absolute top-[5%] left-[10%] w-[80%] h-[80%] bg-white/[0.03] blur-[80px] md:blur-[120px] pointer-events-none rounded-full" />
 
           {/* FORM SIDEBAR: Deep Dark Minimalist */}
-          <aside className="w-full lg:w-[460px] bg-[#000000] border-r border-white/5 lg:overflow-y-auto p-8 flex-shrink-0 z-20">
+          <aside className="w-full lg:w-[460px] bg-[#000000] border-b lg:border-r lg:border-b-0 border-white/5 lg:overflow-y-auto p-4 sm:p-6 lg:p-8 flex-shrink-0 z-20">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-white tracking-tight">New Graphic</h2>
               <Sparkles className="w-5 h-5 text-[#555]" />
@@ -279,7 +279,7 @@ export default function App() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 [color-scheme:dark]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 [color-scheme:dark]">
                   <div>
                     <label className="block text-[#888] text-ls font-regular mb-2">Date</label>
                     <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="w-full glow-border rounded-xl px-5 py-3.5 text-white transition-all outline-none font-medium" />
@@ -316,7 +316,7 @@ export default function App() {
               <button
                 onClick={generateGraphics}
                 disabled={isGenerating || !previewUrl || !formData.parentsName}
-                className="w-full mt-8 glow-border-button rounded-full py-4 flex justify-center items-center gap-2 font-bold text-lg text-white transition-all duration-300"
+                className="w-full mt-6 sm:mt-8 glow-border-button rounded-full py-3 sm:py-4 flex justify-center items-center gap-2 font-bold text-base sm:text-lg text-white transition-all duration-300"
               >
                 {isGenerating ? <><RefreshCw className="w-5 h-5 animate-spin" /> Rendering Assets...</> : <>Generate Designs <ChevronRight className="w-5 h-5" /></>}
               </button>
@@ -324,7 +324,7 @@ export default function App() {
           </aside>
 
           {/* RESULTS AREA: Pitch Black & Elegant */}
-          <section className="flex-1 bg-transparent p-6 lg:p-10 lg:overflow-y-auto relative z-10">
+          <section className="flex-1 bg-transparent p-4 sm:p-6 lg:p-10 lg:overflow-y-auto relative z-10">
             {generatedDesigns.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-[#666]">
                 <div className="w-24 h-24 rounded-full glow-border flex items-center justify-center mb-6 shadow-2xl relative">
@@ -348,20 +348,20 @@ export default function App() {
                   <div key={index} className="glow-border rounded-3xl overflow-hidden flex flex-col transition-all duration-300">
 
                     {/* Card Header */}
-                    <div className="px-6 py-5 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#000]">
+                    <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#000]">
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-bold text-[#888] bg-[#0A0A0A] border border-white/10 px-2.5 py-1 rounded-md">0{index + 1}</span>
-                        <h3 className="font-bold text-white text-lg tracking-wide">{design.title}</h3>
+                        <h3 className="font-bold text-white text-base sm:text-lg tracking-wide">{design.title}</h3>
                       </div>
                       <a href={design.dataUrl} download={`AVSTUDIOX_${formData.parentsName.split(' ')[0]}_0${index + 1}.jpg`}
-                        className="flex items-center gap-2 glow-border-button px-6 py-2.5 rounded-full font-bold text-sm text-white transition-all active:scale-95">
+                        className="flex items-center justify-center gap-2 glow-border-button px-6 py-2.5 rounded-full font-bold text-sm text-white transition-all active:scale-95 w-full sm:w-auto">
                         <Download className="w-4 h-4 text-white" /> Export JPG
                       </a>
                     </div>
 
                     {/* Image Display */}
-                    <div className="p-8 lg:p-12 bg-[#0A0A0A] flex-1 flex items-center justify-center relative overflow-hidden group">
-                      <img src={design.dataUrl} alt={design.title} className="max-w-full max-h-[60vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-md border border-[#222] relative z-10 transition-transform duration-500 group-hover:scale-[1.02]" />
+                    <div className="p-4 sm:p-8 lg:p-12 bg-[#0A0A0A] flex-1 flex items-center justify-center relative overflow-hidden group">
+                      <img src={design.dataUrl} alt={design.title} className="max-w-full max-h-[50vh] sm:max-h-[60vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-md border border-[#222] relative z-10 transition-transform duration-500 group-hover:scale-[1.02]" />
                     </div>
                   </div>
                 ))}
