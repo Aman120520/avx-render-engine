@@ -1,5 +1,175 @@
-import React, { useState, useEffect } from 'react';
-import { Upload, Image as ImageIcon, Download, Calendar, RefreshCw, CheckCircle2, Sparkles, ChevronRight, Aperture } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Upload, Image as ImageIcon, Download, Calendar, Clock, RefreshCw, CheckCircle2, Sparkles, ChevronRight, Aperture } from 'lucide-react';
+
+const GlassDatePicker = ({ value, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [viewDate, setViewDate] = useState(new Date(value || Date.now()));
+  const calendarRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const daysInMonth = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0).getDate();
+  const firstDay = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1).getDay();
+
+  const handleDateClick = (day) => {
+    const formattedMonth = String(viewDate.getMonth() + 1).padStart(2, '0');
+    const formattedDay = String(day).padStart(2, '0');
+    onChange(`${viewDate.getFullYear()}-${formattedMonth}-${formattedDay}`);
+    setIsOpen(false);
+  };
+
+  const nextMonth = () => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+  const prevMonth = () => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
+
+  const formatDisplayDate = (dateString) => {
+     if(!dateString) return "Select Date";
+     const [y, m, d] = dateString.split('-');
+     return `${d}/${m}/${y}`;
+  };
+
+  return (
+    <div className="relative w-full" ref={calendarRef}>
+       <div 
+         className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
+         onClick={() => setIsOpen(!isOpen)}
+       >
+         <span className="font-semibold">{formatDisplayDate(value)}</span>
+         <Calendar className="w-4 h-4 text-[#888]" />
+       </div>
+       
+       {isOpen && (
+         <div className="absolute top-[calc(100%+8px)] left-0 w-72 bg-[#1c1c1e]/70 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-2xl z-50">
+            <div className="flex justify-between items-center mb-5 text-white">
+              <button type="button" onClick={prevMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&lsaquo;</button>
+              <span className="font-bold text-sm tracking-wide">
+                {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+              </span>
+              <button type="button" onClick={nextMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&rsaquo;</button>
+            </div>
+            <div className="grid grid-cols-7 gap-1 text-center mb-2">
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+                <div key={d} className="text-[10px] font-bold text-[#888] uppercase">{d}</div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 gap-1">
+              {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                 const day = i + 1;
+                 const checkMonth = String(viewDate.getMonth() + 1).padStart(2, '0');
+                 const checkDay = String(day).padStart(2, '0');
+                 const isSelected = value === `${viewDate.getFullYear()}-${checkMonth}-${checkDay}`;
+                 return (
+                   <button 
+                     type="button"
+                     key={day} 
+                     onClick={() => handleDateClick(day)}
+                     className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                       isSelected ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white hover:bg-white/20'
+                     }`}
+                   >
+                     {day}
+                   </button>
+                 );
+              })}
+            </div>
+         </div>
+       )}
+    </div>
+  );
+};
+
+const GlassTimePicker = ({ value, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const timeRef = useRef();
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (timeRef.current && !timeRef.current.contains(e.target)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const formatDisplayTime = () => {
+     if(!value) return "Select Time";
+     const [h, m] = value.split(':');
+     const H = parseInt(h);
+     const ampm = H >= 12 ? 'PM' : 'AM';
+     const h12 = H % 12 || 12;
+     return `${String(h12).padStart(2, '0')}:${m} ${ampm}`;
+  };
+
+  const handleTimeChange = (type, val) => {
+     let [h, m] = value.split(':');
+     let H = parseInt(h);
+     if (type === 'H') {
+       const isPmNow = H >= 12;
+       H = val % 12;
+       if (isPmNow) H += 12;
+     } else if (type === 'M') {
+       m = String(val).padStart(2, '0');
+     } else if (type === 'AMPM') {
+       if (val === 'PM' && H < 12) H += 12;
+       if (val === 'AM' && H >= 12) H -= 12;
+     }
+     onChange(`${String(H).padStart(2, '0')}:${m}`);
+  };
+
+  const currentH = value ? parseInt(value.split(':')[0]) : 9;
+  const hour12 = currentH % 12 || 12;
+  const currentM = value ? parseInt(value.split(':')[1]) : 15;
+  const isPM = currentH >= 12;
+
+  // Jump to minutes manually or gently scroll
+  return (
+    <div className="relative w-full" ref={timeRef}>
+       <div 
+         className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
+         onClick={() => setIsOpen(!isOpen)}
+       >
+         <span className="font-semibold">{formatDisplayTime()}</span>
+         <Clock className="w-4 h-4 text-[#888]" />
+       </div>
+       
+       {isOpen && (
+         <div className="absolute top-[calc(100%+8px)] right-0 w-56 bg-[#1c1c1e]/80 backdrop-blur-3xl border border-white/10 rounded-2xl p-3 shadow-2xl z-50 flex gap-1 h-52 hide-scrollbars">
+            <div className="flex-1 overflow-y-auto space-y-1 pr-1 hide-scrollbars relative snap-y">
+               {Array.from({length: 12}).map((_, i) => {
+                 const hr = i + 1;
+                 const selected = hr === hour12;
+                 return (
+                   <div key={hr} onClick={() => handleTimeChange('H', hr)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
+                     {String(hr).padStart(2, '0')}
+                   </div>
+                 );
+               })}
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-1 px-1 border-x border-white/5 hide-scrollbars relative snap-y">
+               {Array.from({length: 60}).map((_, i) => {
+                 const selected = i === currentM;
+                 return (
+                   <div key={i} onClick={() => handleTimeChange('M', i)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
+                     {String(i).padStart(2, '0')}
+                   </div>
+                 );
+               })}
+            </div>
+            <div className="flex-1 flex flex-col justify-center space-y-2 pl-1">
+               <div onClick={() => handleTimeChange('AMPM', 'AM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${!isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>AM</div>
+               <div onClick={() => handleTimeChange('AMPM', 'PM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>PM</div>
+            </div>
+         </div>
+       )}
+    </div>
+  );
+};
+
 
 export default function App() {
   const LAYOUT = {
@@ -10,13 +180,18 @@ export default function App() {
     textY: 40.0
   };
 
-  const [formData, setFormData] = useState({
-    parentsName: '',
-    date: new Date().toISOString().split('T')[0],
-    time: '09:15',
-    gender: 'male',
-    weight: '2.100',
-    package: 'Gold'
+  const [formData, setFormData] = useState(() => {
+    const d = new Date();
+    const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const localTime = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    return {
+      parentsName: '',
+      date: localDate,
+      time: localTime,
+      gender: 'male',
+      weight: '2.100',
+      package: 'Gold'
+    };
   });
 
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -282,21 +457,27 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 [color-scheme:dark]">
                   <div>
                     <label className="block text-[#888] text-ls font-regular mb-2">Date</label>
-                    <input type="date" name="date" value={formData.date} onChange={handleInputChange} className="w-full glow-border rounded-xl px-5 py-3.5 text-white transition-all outline-none font-medium" />
+                    <GlassDatePicker 
+                      value={formData.date} 
+                      onChange={(val) => setFormData(prev => ({...prev, date: val}))} 
+                    />
                   </div>
                   <div>
                     <label className="block text-[#888] text-ls font-regular mb-2">Time</label>
-                    <input type="time" name="time" value={formData.time} onChange={handleInputChange} className="w-full glow-border rounded-xl px-5 py-3.5 text-white transition-all outline-none font-medium" />
+                    <GlassTimePicker 
+                      value={formData.time} 
+                      onChange={(val) => setFormData(prev => ({...prev, time: val}))} 
+                    />
                   </div>
                   <div>
-                    <label className="block text-[#888] text-ls font-regular mb-2">Theme Color</label>
+                    <label className="block text-[#888] text-ls font-regular mb-2">Gender</label>
                     <select name="gender" value={formData.gender} onChange={handleInputChange} className="w-full glow-border rounded-xl px-5 py-3.5 text-white transition-all outline-none appearance-none font-medium">
-                      <option value="male">Ocean Blue</option>
-                      <option value="female">Rose Pink</option>
+                      <option value="male">Boy</option>
+                      <option value="female">Girl</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[#888] text-ls font-regular mb-2">Subject Weight</label>
+                    <label className="block text-[#888] text-ls font-regular mb-2">Baby Weight (kg)</label>
                     <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} className="w-full glow-border rounded-xl px-5 py-3.5 text-white placeholder-[#444] transition-all outline-none font-medium" placeholder="2.100" />
                   </div>
                 </div>

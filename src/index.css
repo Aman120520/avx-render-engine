@@ -46,4 +46,12 @@
     box-shadow: none;
     opacity: 0.7;
   }
+
+  .hide-scrollbars {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .hide-scrollbars::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 }
