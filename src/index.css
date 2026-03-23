@@ -1,57 +1,136 @@
 @import "tailwindcss";
+
 @layer utilities {
   .glow-border {
     border: 1px solid transparent;
-    background: 
-      linear-gradient(#050505, #000000) padding-box,
-      linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.1) 35%, rgba(255,255,255,0.02) 100%) border-box;
-    box-shadow: 
-      -4px -4px 15px -5px rgba(255, 255, 255, 0.3),
-      0px 0px 10px -2px rgba(255, 255, 255, 0.1);
+    background:
+      linear-gradient(rgba(5, 5, 5, 0.6), rgba(0, 0, 0, 0.7)) padding-box,
+      linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 100%) border-box;
+    box-shadow:
+      0 10px 30px -10px rgba(0, 0, 0, 0.5),
+      -2px -2px 5px rgba(255, 255, 255, 0.1);
     color: #fff;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
-  
-  .glow-border:hover, .glow-border:focus {
-    background: 
-      linear-gradient(#0A0A0A, #050505) padding-box,
-      linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.05) 100%) border-box;
-    box-shadow: 
-      -5px -5px 20px -4px rgba(255, 255, 255, 0.4),
-      0px 0px 15px -2px rgba(255, 255, 255, 0.15);
+
+  .glow-border:hover,
+  .glow-border:focus {
+    background:
+      linear-gradient(rgba(10, 10, 10, 0.8), rgba(5, 5, 5, 0.9)) padding-box,
+      linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.05) 100%) border-box;
+    box-shadow:
+      0 15px 40px -10px rgba(0, 0, 0, 0.6),
+      -3px -3px 8px rgba(255, 255, 255, 0.15);
   }
 
   .glow-border-button {
     border: 1px solid transparent;
-    background: 
+    background:
       linear-gradient(#000000, #000000) padding-box,
-      linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.15) 40%, rgba(255,255,255,0) 100%) border-box;
-    box-shadow: 
+      linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0) 100%) border-box;
+    box-shadow:
       -8px -8px 25px -8px rgba(255, 255, 255, 0.6),
       0px 0px 10px rgba(255, 255, 255, 0.1);
   }
 
   .glow-border-button:hover:not(:disabled) {
-    background: 
+    background:
       linear-gradient(#0A0A0A, #0A0A0A) padding-box,
-      linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.05) 100%) border-box;
-    box-shadow: 
+      linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.05) 100%) border-box;
+    box-shadow:
       -10px -10px 30px -8px rgba(255, 255, 255, 0.7),
       0px 0px 15px rgba(255, 255, 255, 0.2);
   }
 
   .glow-border-button:disabled {
-    background: 
+    background:
       linear-gradient(#0A0A0A, #0A0A0A) padding-box,
-      linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 100%) border-box;
+      linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0) 100%) border-box;
     box-shadow: none;
     opacity: 0.7;
   }
 
   .hide-scrollbars {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
-  .hide-scrollbars::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+
+  /* Technical Grid Asset */
+  .grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: -25;
+    mask-image: radial-gradient(circle at 50% 50%, black, transparent 90%);
+    pointer-events: none;
+  }
+
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -20;
+    background: url("https://grainy-gradients.vercel.app/noise.svg");
+    opacity: 0.12;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  /* Floating Bokeh Particles */
+  .floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -15;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(1px);
+    animation: float-up var(--duration) infinite linear;
+  }
+
+  @keyframes float-up {
+    from {
+      transform: translateY(110vh) translateX(var(--x-start));
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 0.2;
+    }
+
+    to {
+      transform: translateY(-10vh) translateX(var(--x-end));
+      opacity: 0;
+    }
+  }
+
+  .backdrop-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%);
+    pointer-events: none;
+    z-index: -10;
   }
 }
