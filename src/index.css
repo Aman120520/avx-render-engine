@@ -10,8 +10,10 @@
       0 10px 30px -10px rgba(0, 0, 0, 0.5),
       -2px -2px 5px rgba(255, 255, 255, 0.1);
     color: #fff;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
   .glow-border:hover,
@@ -104,6 +106,8 @@
     border-radius: 50%;
     opacity: 0.1;
     filter: blur(1px);
+    backface-visibility: hidden;
+    will-change: transform;
     animation: float-up var(--duration) infinite linear;
   }
 
