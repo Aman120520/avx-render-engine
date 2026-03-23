@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <canvas id="c"></canvas>
+  <script>
+    const img = new Image();
+    img.src = '/BabyBoy_Template.png';
+    img.onload = () => {
+      const c = document.getElementById('c');
+      const ctx = c.getContext('2d');
+      c.width = img.width; c.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0,0,c.width,c.height).data;
+      // The inner circle has some empty space or different color. We can just draw it, and add a click listener to log coords.
+      document.body.innerHTML += `<div id="res">Loaded</div>`;
+      
+      c.onclick = (e) => {
+        const rect = c.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (c.width / rect.width);
+        const y = (e.clientY - rect.top) * (c.height / rect.height);
+        document.getElementById('res').innerText += ` | Click: ${x.toFixed(1)}, ${y.toFixed(1)}`;
+      };
+    };
+  </script>
+</body>
+</html>

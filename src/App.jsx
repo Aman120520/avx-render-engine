@@ -28,58 +28,57 @@ const GlassDatePicker = ({ value, onChange }) => {
   const prevMonth = () => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
 
   const formatDisplayDate = (dateString) => {
-     if(!dateString) return "Select Date";
-     const [y, m, d] = dateString.split('-');
-     return `${d}/${m}/${y}`;
+    if (!dateString) return "Select Date";
+    const [y, m, d] = dateString.split('-');
+    return `${d}/${m}/${y}`;
   };
 
   return (
     <div className="relative w-full" ref={calendarRef}>
-       <div 
-         className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
-         onClick={() => setIsOpen(!isOpen)}
-       >
-         <span className="font-semibold">{formatDisplayDate(value)}</span>
-         <Calendar className="w-4 h-4 text-[#888]" />
-       </div>
-       
-       {isOpen && (
-         <div className="absolute top-[calc(100%+8px)] left-0 w-72 bg-[#1c1c1e]/70 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-2xl z-50">
-            <div className="flex justify-between items-center mb-5 text-white">
-              <button type="button" onClick={prevMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&lsaquo;</button>
-              <span className="font-bold text-sm tracking-wide">
-                {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
-              </span>
-              <button type="button" onClick={nextMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&rsaquo;</button>
-            </div>
-            <div className="grid grid-cols-7 gap-1 text-center mb-2">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
-                <div key={d} className="text-[10px] font-bold text-[#888] uppercase">{d}</div>
-              ))}
-            </div>
-            <div className="grid grid-cols-7 gap-1">
-              {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
-              {Array.from({ length: daysInMonth }).map((_, i) => {
-                 const day = i + 1;
-                 const checkMonth = String(viewDate.getMonth() + 1).padStart(2, '0');
-                 const checkDay = String(day).padStart(2, '0');
-                 const isSelected = value === `${viewDate.getFullYear()}-${checkMonth}-${checkDay}`;
-                 return (
-                   <button 
-                     type="button"
-                     key={day} 
-                     onClick={() => handleDateClick(day)}
-                     className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                       isSelected ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white hover:bg-white/20'
-                     }`}
-                   >
-                     {day}
-                   </button>
-                 );
-              })}
-            </div>
-         </div>
-       )}
+      <div
+        className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="font-semibold">{formatDisplayDate(value)}</span>
+        <Calendar className="w-4 h-4 text-[#888]" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-[calc(100%+8px)] left-0 w-72 bg-[#1c1c1e]/70 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-2xl z-50">
+          <div className="flex justify-between items-center mb-5 text-white">
+            <button type="button" onClick={prevMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&lsaquo;</button>
+            <span className="font-bold text-sm tracking-wide">
+              {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+            </span>
+            <button type="button" onClick={nextMonth} className="p-1 px-3 hover:bg-white/15 rounded-lg transition-colors bg-white/5 font-bold">&rsaquo;</button>
+          </div>
+          <div className="grid grid-cols-7 gap-1 text-center mb-2">
+            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+              <div key={d} className="text-[10px] font-bold text-[#888] uppercase">{d}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const checkMonth = String(viewDate.getMonth() + 1).padStart(2, '0');
+              const checkDay = String(day).padStart(2, '0');
+              const isSelected = value === `${viewDate.getFullYear()}-${checkMonth}-${checkDay}`;
+              return (
+                <button
+                  type="button"
+                  key={day}
+                  onClick={() => handleDateClick(day)}
+                  className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${isSelected ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-white hover:bg-white/20'
+                    }`}
+                >
+                  {day}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -97,28 +96,28 @@ const GlassTimePicker = ({ value, onChange }) => {
   }, []);
 
   const formatDisplayTime = () => {
-     if(!value) return "Select Time";
-     const [h, m] = value.split(':');
-     const H = parseInt(h);
-     const ampm = H >= 12 ? 'PM' : 'AM';
-     const h12 = H % 12 || 12;
-     return `${String(h12).padStart(2, '0')}:${m} ${ampm}`;
+    if (!value) return "Select Time";
+    const [h, m] = value.split(':');
+    const H = parseInt(h);
+    const ampm = H >= 12 ? 'PM' : 'AM';
+    const h12 = H % 12 || 12;
+    return `${String(h12).padStart(2, '0')}:${m} ${ampm}`;
   };
 
   const handleTimeChange = (type, val) => {
-     let [h, m] = value.split(':');
-     let H = parseInt(h);
-     if (type === 'H') {
-       const isPmNow = H >= 12;
-       H = val % 12;
-       if (isPmNow) H += 12;
-     } else if (type === 'M') {
-       m = String(val).padStart(2, '0');
-     } else if (type === 'AMPM') {
-       if (val === 'PM' && H < 12) H += 12;
-       if (val === 'AM' && H >= 12) H -= 12;
-     }
-     onChange(`${String(H).padStart(2, '0')}:${m}`);
+    let [h, m] = value.split(':');
+    let H = parseInt(h);
+    if (type === 'H') {
+      const isPmNow = H >= 12;
+      H = val % 12;
+      if (isPmNow) H += 12;
+    } else if (type === 'M') {
+      m = String(val).padStart(2, '0');
+    } else if (type === 'AMPM') {
+      if (val === 'PM' && H < 12) H += 12;
+      if (val === 'AM' && H >= 12) H -= 12;
+    }
+    onChange(`${String(H).padStart(2, '0')}:${m}`);
   };
 
   const currentH = value ? parseInt(value.split(':')[0]) : 9;
@@ -129,43 +128,43 @@ const GlassTimePicker = ({ value, onChange }) => {
   // Jump to minutes manually or gently scroll
   return (
     <div className="relative w-full" ref={timeRef}>
-       <div 
-         className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
-         onClick={() => setIsOpen(!isOpen)}
-       >
-         <span className="font-semibold">{formatDisplayTime()}</span>
-         <Clock className="w-4 h-4 text-[#888]" />
-       </div>
-       
-       {isOpen && (
-         <div className="absolute top-[calc(100%+8px)] right-0 w-56 bg-[#1c1c1e]/80 backdrop-blur-3xl border border-white/10 rounded-2xl p-3 shadow-2xl z-50 flex gap-1 h-52 hide-scrollbars">
-            <div className="flex-1 overflow-y-auto space-y-1 pr-1 hide-scrollbars relative snap-y">
-               {Array.from({length: 12}).map((_, i) => {
-                 const hr = i + 1;
-                 const selected = hr === hour12;
-                 return (
-                   <div key={hr} onClick={() => handleTimeChange('H', hr)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
-                     {String(hr).padStart(2, '0')}
-                   </div>
-                 );
-               })}
-            </div>
-            <div className="flex-1 overflow-y-auto space-y-1 px-1 border-x border-white/5 hide-scrollbars relative snap-y">
-               {Array.from({length: 60}).map((_, i) => {
-                 const selected = i === currentM;
-                 return (
-                   <div key={i} onClick={() => handleTimeChange('M', i)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
-                     {String(i).padStart(2, '0')}
-                   </div>
-                 );
-               })}
-            </div>
-            <div className="flex-1 flex flex-col justify-center space-y-2 pl-1">
-               <div onClick={() => handleTimeChange('AMPM', 'AM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${!isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>AM</div>
-               <div onClick={() => handleTimeChange('AMPM', 'PM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>PM</div>
-            </div>
-         </div>
-       )}
+      <div
+        className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="font-semibold">{formatDisplayTime()}</span>
+        <Clock className="w-4 h-4 text-[#888]" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-[calc(100%+8px)] right-0 w-56 bg-[#1c1c1e]/80 backdrop-blur-3xl border border-white/10 rounded-2xl p-3 shadow-2xl z-50 flex gap-1 h-52 hide-scrollbars">
+          <div className="flex-1 overflow-y-auto space-y-1 pr-1 hide-scrollbars relative snap-y">
+            {Array.from({ length: 12 }).map((_, i) => {
+              const hr = i + 1;
+              const selected = hr === hour12;
+              return (
+                <div key={hr} onClick={() => handleTimeChange('H', hr)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
+                  {String(hr).padStart(2, '0')}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex-1 overflow-y-auto space-y-1 px-1 border-x border-white/5 hide-scrollbars relative snap-y">
+            {Array.from({ length: 60 }).map((_, i) => {
+              const selected = i === currentM;
+              return (
+                <div key={i} onClick={() => handleTimeChange('M', i)} className={`snap-center text-center py-2 rounded-xl cursor-pointer text-sm font-bold transition-colors ${selected ? 'bg-white text-black shadow-md' : 'text-[#bbb] hover:text-white hover:bg-white/10'}`}>
+                  {String(i).padStart(2, '0')}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex-1 flex flex-col justify-center space-y-2 pl-1">
+            <div onClick={() => handleTimeChange('AMPM', 'AM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${!isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>AM</div>
+            <div onClick={() => handleTimeChange('AMPM', 'PM')} className={`text-center py-3 rounded-xl cursor-pointer text-sm font-black transition-colors ${isPM ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'text-[#888] bg-white/5 hover:text-white hover:bg-white/10'}`}>PM</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -235,6 +234,93 @@ export default function App() {
     if (imgAspect > 1) { sWidth = img.height; sX = (img.width - img.height) / 2; }
     else { sHeight = img.width; sY = (img.height - img.width) / 2; }
     ctx.drawImage(img, sX, sY, sWidth, sHeight, cx - radius, cy - radius, radius * 2, radius * 2); ctx.restore();
+  };
+
+  const generateTemplateBased = async (babyImg, isBoy) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 1303;
+    const ctx = canvas.getContext('2d');
+
+    const templateImg = new Image();
+    templateImg.src = isBoy ? '/BabyBoy_Template.png' : '/BabyGirl_Template.png';
+    await new Promise((resolve, reject) => {
+      templateImg.onload = resolve;
+      templateImg.onerror = () => reject(new Error("Template image invalid."));
+    });
+
+    // Draw the opaque template first
+    ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+
+    // Save context to clip the baby image directly into the inner scalloped white frame
+    ctx.save();
+
+    // Accurate estimated center and radius of the inner frame from visual proportion:
+    const cx = 450;
+    const cy = 635;
+    const radius = 350;
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip(); // Mask the image to draw perfectly in the white inner circle
+
+    const imgAspect = babyImg.width / babyImg.height;
+    let sWidth = babyImg.width, sHeight = babyImg.height, sX = 0, sY = 0;
+    if (imgAspect > 1) {
+      sWidth = babyImg.height;
+      sX = (babyImg.width - babyImg.height) / 2;
+    } else {
+      sHeight = babyImg.width;
+      sY = (babyImg.height - babyImg.width) / 2;
+    }
+    ctx.drawImage(babyImg, sX, sY, sWidth, sHeight, cx - radius, cy - radius, radius * 2, radius * 2);
+    ctx.restore();
+
+    // Now adding the text on the right side
+    const textCx = 1420; // center of the right blank space
+    const textColor = isBoy ? '#0B4A8E' : '#D61C6A';
+    const quoteColor = isBoy ? '#175C9A' : '#C82C75';
+
+    // Format Names
+    const words = formData.parentsName.trim().toUpperCase().split(' ');
+    let line1 = "TO, ", line2 = "& FAMILY";
+    if (words.length === 1) {
+      line1 += words[0] || '';
+    } else {
+      let splitIdx = 1; let minDiff = Infinity;
+      for (let i = 1; i < words.length; i++) {
+        const diff = Math.abs(("TO, " + words.slice(0, i).join(' ')).length - (words.slice(i).join(' ') + " & FAMILY").length);
+        if (diff < minDiff) { minDiff = diff; splitIdx = i; }
+      }
+      line1 = "TO, " + words.slice(0, splitIdx).join(' ');
+      line2 = words.slice(splitIdx).join(' ') + " & FAMILY";
+    }
+
+    ctx.textAlign = 'center';
+
+    const drawFittedText = (text, y, baseSize, maxW) => {
+      let size = baseSize;
+      ctx.font = `900 ${size}px "Satoshi", sans-serif`;
+      while (ctx.measureText(text).width > maxW && size > 24) {
+          size -= 2;
+          ctx.font = `900 ${size}px "Satoshi", sans-serif`;
+      }
+      ctx.fillText(text, textCx, y);
+    };
+
+    // Large Name Text
+    ctx.fillStyle = textColor;
+    drawFittedText(line1, 530, 65, 1000);
+    drawFittedText(line2, 620, 65, 1000);
+
+    // Quote text
+    ctx.fillStyle = quoteColor;
+    ctx.font = '500 48px "Satoshi", sans-serif';
+    ctx.fillText('“Warm Welcome for child with Lots of', textCx, 740);
+    ctx.fillText('Love & Greetings”', textCx, 810);
+
+    return canvas.toDataURL('image/jpeg', 0.95);
   };
 
   const generateClassic = async (babyImg, isBoy) => {
@@ -331,13 +417,15 @@ export default function App() {
         babyImg.onerror = () => reject(new Error("Baby image invalid."));
       });
 
-      const [classicUrl, minimalistUrl, vibrantUrl] = await Promise.all([
+      const [premiumUrl, classicUrl, minimalistUrl, vibrantUrl] = await Promise.all([
+        generateTemplateBased(babyImg, isBoy),
         generateClassic(babyImg, isBoy),
         generateMinimalist(babyImg, isBoy),
         generateVibrant(babyImg, isBoy)
       ]);
 
       setGeneratedDesigns([
+        { title: "Premium Template", dataUrl: premiumUrl },
         { title: "Classic Layout", dataUrl: classicUrl },
         { title: "Modern Minimalist", dataUrl: minimalistUrl },
         { title: "Vibrant Premium", dataUrl: vibrantUrl }
@@ -457,16 +545,16 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 [color-scheme:dark]">
                   <div>
                     <label className="block text-[#888] text-ls font-regular mb-2">Date</label>
-                    <GlassDatePicker 
-                      value={formData.date} 
-                      onChange={(val) => setFormData(prev => ({...prev, date: val}))} 
+                    <GlassDatePicker
+                      value={formData.date}
+                      onChange={(val) => setFormData(prev => ({ ...prev, date: val }))}
                     />
                   </div>
                   <div>
                     <label className="block text-[#888] text-ls font-regular mb-2">Time</label>
-                    <GlassTimePicker 
-                      value={formData.time} 
-                      onChange={(val) => setFormData(prev => ({...prev, time: val}))} 
+                    <GlassTimePicker
+                      value={formData.time}
+                      onChange={(val) => setFormData(prev => ({ ...prev, time: val }))}
                     />
                   </div>
                   <div>
@@ -521,7 +609,7 @@ export default function App() {
                   <div className="glow-border p-2 rounded-full"><CheckCircle2 className="w-5 h-5 text-white" /></div>
                   <div>
                     <h3 className="font-bold text-lg tracking-wide text-white">Render Complete</h3>
-                    <p className="text-sm text-[#888] font-medium">3 high-resolution variants generated. Ready for export.</p>
+                    <p className="text-sm text-[#888] font-medium">4 high-resolution variants generated. Ready for export.</p>
                   </div>
                 </div>
 
