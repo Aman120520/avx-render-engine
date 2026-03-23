@@ -1,5 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock, ChevronDown, Check } from 'lucide-react';
+
+export const GlassSelect = ({ value, onChange, options }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef();
+  useEffect(() => {
+    const handleClick = (e) => { if (selectRef.current && !selectRef.current.contains(e.target)) setIsOpen(false); };
+    document.addEventListener("mousedown", handleClick); return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const selectedOption = options.find(o => o.value === value) || options[0];
+
+  return (
+    <div className="relative w-full" ref={selectRef}>
+      <div className="w-full glow-border rounded-xl px-5 py-3.5 text-white flex justify-between items-center cursor-pointer select-none transition-all hover:bg-white/5 active:scale-[0.98]" onClick={() => setIsOpen(!isOpen)}>
+        <span className="font-bold">{selectedOption.label}</span>
+        <ChevronDown className={`w-4 h-4 text-[#888] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+      {isOpen && (
+        <div className="absolute top-[calc(100%+8px)] left-0 w-full min-w-[160px] bg-[#1c1c1e]/90 backdrop-blur-3xl border border-white/10 rounded-2xl p-2 shadow-2xl z-[100] animate-in fade-in zoom-in duration-200">
+          <div className="max-h-60 overflow-y-auto hide-scrollbars">
+            {options.map((option) => (
+              <div 
+                key={option.value}
+                onClick={() => { onChange(option.value); setIsOpen(false); }}
+                className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all ${value === option.value ? 'bg-white text-black font-bold shadow-lg' : 'text-[#bbb] hover:bg-white/10 hover:text-white'}`}
+              >
+                <span className="text-sm">{option.label}</span>
+                {value === option.value && <Check className="w-4 h-4" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const GlassDatePicker = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +56,7 @@ export const GlassDatePicker = ({ value, onChange }) => {
       {isOpen && (
         <div className="absolute top-[calc(100%+8px)] left-0 w-72 bg-[#1c1c1e]/70 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-2xl z-50 animate-in fade-in zoom-in duration-200">
           <div className="grid grid-cols-7 gap-1">
-            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => <div key={d} className="text-[10px] font-bold text-[#888] uppercase text-center mb-2">{d}</div>)}
+            {['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'].map(d => <div key={d} className="text-[10px] font-bold text-[#888] text-center mb-2">{d}</div>)}
             {Array.from({ length: first }).map((_, i) => <div key={i} />)}
             {Array.from({ length: days }).map((_, i) => {
               const d = i + 1; const m = String(now.getMonth() + 1).padStart(2, '0'); const day = String(d).padStart(2, '0');

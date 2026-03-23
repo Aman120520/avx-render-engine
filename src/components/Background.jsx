@@ -35,7 +35,7 @@ export const VideoBackground = () => (
     loop
     muted
     playsInline
-    className="fixed top-0 left-0 w-full h-full object-cover z-[-40] opacity-100"
+    className="fixed top-0 left-0 w-full h-full object-cover z-[-40] opacity-20"
   >
     <source src="/bg_wave.mp4" type="video/mp4" />
   </video>
