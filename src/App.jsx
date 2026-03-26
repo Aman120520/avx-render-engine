@@ -3,7 +3,7 @@ import { Upload, Image as ImageIcon, Download, RefreshCw, Sparkles, ChevronRight
 
 // --- Imports ---
 import { FESTIVALS } from './constants/festivals';
-import { generateTemplateBased, generateMinimalist, generateVibrant, generateFestivalCreative } from './utils/canvasHelper';
+import { generateTemplateBased, generateMinimalist, generateVibrant, generateFestivalCreative, generateAIFestivalImage } from './utils/canvasHelper';
 import { ParticleSystem, BackgroundShapes, VideoBackground } from './components/Background';
 import { GlassDatePicker, GlassTimePicker, GlassSelect } from './components/Pickers';
 
@@ -56,18 +56,70 @@ export default function App() {
     });
   };
 
+  const getFestivalPrompt = (fest) => {
+    const basePrompts = {
+      'uttarayan': 'Vibrant colorful kites in the sunset sky, cinematic lighting, 4k high resolution, realistic digital art',
+      'republic-day': 'Indian national flag colors themed celebration, tri-color smoke, pride of India, high quality render',
+      'diwali': 'Traditional oil lamps (diyas) on a beautiful flower rangoli, warm golden glow, bokeh background, cinematic 4k',
+      'janmashtami': 'Little Krishna theme with peacock feathers and flute, divine child energy, cinematic render, artistic',
+      'christmas': 'Winter wonderland with a decorated tree and warm lighting, cozy festive atmosphere, high resolution 3D render',
+      'navratri': 'Dandiya dance scene with traditional garba attire, vibrant celebration colors, bokeh background, cinematic',
+      'ganesh-chaturthi': 'Ganesha idol with floral decoration, divine and peaceful vibes, artistic digital render, high detail',
+      'holi': 'Celebration with vibrant splash of colors, joyful atmosphere, high quality cinematic photorealistic',
+      'mahashivratri': 'Lord Shiva meditative pose with glowing third eye and crescent moon, Himalayas background, divine blue energy, cinematic 4k',
+      'independence-day': 'Tiranga flying high against a beautiful morning sky, sense of freedom and pride, cinematic 4k render',
+      'rath-yatra': 'Grand chariot of Lord Jagannath, vibrant colors, festive crowd, divine journey, cinematic lighting',
+    };
+    return basePrompts[fest.id] || `Traditional ${fest.name} celebration background, cinematic Indian cultural festival theme, vibrant colors, high resolution digital art`;
+  };
+
   const handleStartFestival = async (fest) => {
-    setIsGenerating(true); setSelectedFestival(fest);
+    setIsGenerating(true);
+    setSelectedFestival(fest);
     try {
-      const logoImg = new Image(); logoImg.crossOrigin = "anonymous"; logoImg.src = '/logo.png';
+      const logoImg = new Image();
+      logoImg.crossOrigin = "anonymous";
+      logoImg.src = '/logo.png';
       await new Promise(r => logoImg.onload = r);
-      await new Promise(r => setTimeout(r, 1500)); // Simulating AI search
-      const designs = await Promise.all([0, 1, 2].map(async (i) => ({
-        title: `Option 0${i + 1}`,
-        dataUrl: await generateFestivalCreative(fest, i, logoImg)
-      })));
+
+      const prompt = getFestivalPrompt(fest);
+
+      const designs = await Promise.all([0, 1, 2].map(async (i) => {
+        const seed = Math.floor(Math.random() * 1000000);
+        // Correct URL format for Pollinations.ai
+        const aiImageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(prompt)}?width=1080&height=1350&seed=${seed}&nologo=true`;
+
+        const aiImg = new Image();
+        aiImg.crossOrigin = "anonymous";
+
+        const imageLoadPromise = new Promise((resolve) => {
+          aiImg.onload = () => resolve(true);
+          aiImg.onerror = () => resolve(false);
+          // Set timeout for image loading
+          setTimeout(() => resolve(false), 15000);
+        });
+
+        aiImg.src = aiImageUrl;
+        const loaded = await imageLoadPromise;
+
+        if (!loaded || aiImg.naturalWidth === 0) {
+          return {
+            title: `Option 0${i + 1}`,
+            dataUrl: await generateFestivalCreative(fest, i, logoImg)
+          };
+        }
+
+        return {
+          title: `AI Concept 0${i + 1}`,
+          dataUrl: await generateAIFestivalImage(aiImg, fest, logoImg)
+        };
+      }));
       setGeneratedDesigns(designs);
-    } catch (e) { console.error(e); } finally { setIsGenerating(false); }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleBabyRender = async () => {
@@ -331,8 +383,8 @@ export default function App() {
       {isGenerating && (
         <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center animate-in fade-in duration-500 p-6 text-center">
           <RefreshCw className="w-12 h-12 sm:w-16 sm:h-16 text-white animate-spin mb-6 sm:mb-8" />
-          <h2 className="text-2xl sm:text-4xl font-bold mb-4">searching world wide...</h2>
-          <p className="text-[#64748B] font-bold text-[10px] sm:text-xs px-6">optimizing {selectedFestival?.name || 'asset'} creatives for payal maternity</p>
+          <h2 className="text-2xl sm:text-4xl font-bold mb-4">Generating with AI...</h2>
+          <p className="text-[#64748B] font-bold text-[10px] sm:text-xs px-6 uppercase tracking-widest">Architecting unique {selectedFestival?.name} visuals for Payal Maternity</p>
         </div>
       )}
     </div>
