@@ -1,0 +1,280 @@
+.upload-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+}
+
+.upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.step-indicator {
+  color: #888;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.btn-logout {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.upload-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.upload-step,
+.vibe-step {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.upload-step h2,
+.vibe-step h2 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+.drag-drop {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.drag-drop:hover,
+.drag-drop.dragging {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.drag-drop h3 {
+  margin: 20px 0 8px 0;
+  font-size: 18px;
+}
+
+.drag-drop p {
+  margin: 0 0 15px 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.file-hint {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.selected-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.file-info h3 {
+  margin: 0;
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.file-info p {
+  margin: 4px 0 0 0;
+  color: #888;
+  font-size: 12px;
+}
+
+.btn-remove {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-remove:hover {
+  color: #ff6b6b;
+}
+
+.error-text,
+.error-message {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 4px;
+}
+
+.btn-next,
+.btn-upload,
+.btn-back {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.btn-next,
+.btn-upload {
+  background: #667eea;
+  color: white;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.btn-next:hover:not(:disabled),
+.btn-upload:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.btn-next:disabled,
+.btn-upload:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.vibe-selector h3 {
+  margin: 0 0 20px 0;
+}
+
+.vibe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.vibe-card {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.vibe-card:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-4px);
+}
+
+.vibe-card.selected {
+  border-color: #667eea;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+.vibe-preview {
+  height: 120px;
+  width: 100%;
+}
+
+.vibe-card h4 {
+  margin: 15px 15px 5px 15px;
+  font-size: 16px;
+}
+
+.vibe-card p {
+  margin: 0 15px 15px 15px;
+  color: #888;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.vibe-checkmark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  background: #667eea;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn-back {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-back:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-upload {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .upload-main {
+    padding: 20px;
+  }
+
+  .drag-drop {
+    padding: 40px 20px;
+  }
+
+  .vibe-grid {
+    grid-template-columns: 1fr;
+  }
+}

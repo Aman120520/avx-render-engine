@@ -1,3 +1,54 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './hooks/useAuth';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { UploadPage } from './pages/UploadPage';
+import { RenderPage } from './pages/RenderPage';
+import { DashboardPage } from './pages/DashboardPage';
+import './index.css';
+
+function ProtectedRoute({ children }) {
+  const { token, loading } = useAuth();
+
+  if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>Loading...</div>;
+  if (!token) return <Navigate to="/login" />;
+  return children;
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/upload" element={
+            <ProtectedRoute>
+              <UploadPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/render/:videoId" element={
+            <ProtectedRoute>
+              <RenderPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/" element={<Navigate to="/upload" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
+
+/* Old Code Backup
 import React, { useState, useEffect } from 'react';
 import { Upload, Image as ImageIcon, Download, RefreshCw, Sparkles, ChevronRight, Aperture, ArrowLeft, Search } from 'lucide-react';
 
@@ -7,7 +58,7 @@ import { generateTemplateBased, generateMinimalist, generateVibrant, generateFes
 import { ParticleSystem, BackgroundShapes, VideoBackground } from './components/Background';
 import { GlassDatePicker, GlassTimePicker, GlassSelect } from './components/Pickers';
 
-export default function App() {
+function OldApp() {
   // --- State Architecture ---
   const [view, setView] = useState('landing');
   const [formData, setFormData] = useState(() => {
@@ -390,3 +441,4 @@ export default function App() {
     </div>
   );
 }
+*/
